@@ -1,9 +1,70 @@
 #content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+  margin: 1.5%;
+  width: 39%;
+  background-color: lightcoral;
+  border: 8px solid grey;
+  border-radius: 5px;
+  text-align: center;
+  float:left;
+}
+
+#smallContent1{
+  margin:3%;
+  width: 19%;
+  background-color: skyblue;
+  border: 8px solid darkgray;
+  border-radius: 5px;
+  text-align: center;
+  float: left;
+}
+#smallContent2{
+  margin:3%;
+  width: 19%;
+  background-color: rgba(12, 197, 12, 0.897);
+  border: 8px solid darkgray;
+  border-radius: 5px;
+  text-align: center;
+  float: left;
+}
+
+#babyParagraph{
+  margin-top: 10%;
 }
 
 #greeting-container {
   margin-top: 20px;
+  background-color: crimson;
+  border: 2px solid grey;
+  text-align: center;
+
+}
+
+#portfolio-header {
+    margin-left: auto;
+    margin-right: auto;
+    width: 22%;
+    background-color: gray;
+    border: 4px ridge silver;
+    text-align: center;
+}
+
+#divider{
+    border: 2px solid darkgray;
+}
+
+h1{
+    color: rgb(202, 202, 11);
+}
+
+body{
+    background-color: slategray;
+}
+
+img {
+    max-width: 90%;
+    max-height: 40%;
+}
+
+li{
+    text-align: left;
 }
