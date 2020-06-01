@@ -33,6 +33,7 @@ function addRandomFact() {
   factContainer.innerText = fact;
 }
 
+var slideIndex = 0;
 function showSlides() {
   var i;
   var slides = document.getElementsByClassName('mySlides');
@@ -46,3 +47,6 @@ function showSlides() {
   slides[slideIndex - 1].style.display = 'block';
   setTimeout(showSlides, 7000);
 }
+
+
+
