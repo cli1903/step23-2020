@@ -48,8 +48,8 @@ function showSlides() {
   setTimeout(showSlides, 7000);
 }
 
-async function getHello() {
-  const response = await fetch('/MyData');
+async function setHelloContainerWithServlet() {
+  const response = await fetch('/Hello');
   const quote = await response.text();
   document.getElementById('hello-container').innerText = quote;
 }
