@@ -53,3 +53,16 @@ async function setHelloContainerWithServlet() {
   const quote = await response.text();
   document.getElementById('hello-container').innerText = quote;
 }
+
+ function setMyTeamConatainerWithServerlet(){
+  fetch('/Team').then(response => response.json()).then((theTeam) => {
+
+    var teamParagraph = 'Here are the members of my team and their position:\n';
+
+    for (i = 0; i < theTeam.members.length; i++){
+        teamParagraph =  teamParagraph + theTeam.members[i].name + '\t'+ theTeam.members[i].status + '\n'
+    }
+
+    document.getElementById('team-container').innerText = teamParagraph;
+ });
+}
