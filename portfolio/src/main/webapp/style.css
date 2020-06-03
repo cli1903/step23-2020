@@ -8,6 +8,16 @@
   float:left;
 }
 
+#smallerContentBox {
+  margin-top: 7.5%;
+  width: 40%;
+  background-color: lightcoral;
+  border: 8px solid grey;
+  border-radius: 5px;
+  text-align: center;
+  float: left;
+}
+
 #smallContent1{
   margin:3%;
   width: 19%;
@@ -21,6 +31,17 @@
   margin:3%;
   width: 19%;
   background-color: rgba(12, 197, 12, 0.897);
+  border: 8px solid darkgray;
+  border-radius: 5px;
+  text-align: center;
+  float: left;
+}
+
+
+#smallContent3{
+  margin:3%;
+  width: 25%;
+  background-color: rgba(194, 197, 12, 0.897);
   border: 8px solid darkgray;
   border-radius: 5px;
   text-align: center;
@@ -53,10 +74,6 @@
 
 #divider{
     border: 2px solid darkgray;
-}
-
-h1{
-    color: rgb(202, 202, 11);
 }
 
 body{
@@ -108,4 +125,9 @@ li{
 @keyframes fade {
   from {opacity: .5}
   to {opacity: 1}
+}
+
+#smallImage{
+    width: 100%;
+    height: 225px;
 }
