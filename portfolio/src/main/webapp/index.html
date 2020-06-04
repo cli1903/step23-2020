@@ -138,9 +138,26 @@
             <div id="team-container"></div>
         </section>
         <section id="smallContent3">
-            <h1>Hello Message</h1>
-            <p>Click here to get a hello:</p>
-            <p>This is a filler box idk what I'll add to this</p>
+            <form action="/comments" method="POST">
+
+                <h1>Enter your NAME then COMMENT seperated by a comma:</h1>
+                <br/><br/>
+                <textarea id ="textBox" name="text-input">Enter your comment here.</textarea>
+                
+                <p>Rate Us:</p>
+                <input type="radio" name="one-star" value="true"> 1 Star
+                <br/>
+                <input type="radio" name="two-star" value="true"> 2 Star
+                <br/>
+                <input type="radio" name="three-star" value="true"> 3 Star
+                <br/>
+                <input type="radio" name="four-star" value="true"> 4 Star
+                <br/>
+                <input type="radio" name="five-star" value="true"> 5 Star
+                <br/>
+                <input type="submit" />
+            </form>
+            <div id="comment-container"></div>
         </section>
     </section>
   </body>
