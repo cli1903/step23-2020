@@ -17,10 +17,14 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +38,29 @@ public final class CommentsServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/json;");
-    response.getWriter().println(new Gson().toJson(theComments));
-    }
+  
+    Query query = new Query("Comment");
 
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+        List<Comment> comments = new ArrayList<>();
+        for (Entity entity : results.asIterable()) {
+        
+        String name = (String) entity.getProperty("name");
+        String payload = (String) entity.getProperty("payload");
+        int stars = (int) entity.getProperty("stars");
+
+        Comment comment = new Comment(name, payload, stars);
+        comments.add(comment);
+        }
+
+        Gson gson = new Gson();
+
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(comments));
+  }
+    
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -50,20 +73,18 @@ public final class CommentsServlet extends HttpServlet {
     if( Boolean.parseBoolean(getParameter(request,"three-star", "false"))){stars=3;}
     if( Boolean.parseBoolean(getParameter(request,"four-star", "false"))){stars=4;}
     if( Boolean.parseBoolean(getParameter(request,"five-star", "false"))){stars=5;}
-
+    
     Comment comment = new Comment(name,payload,stars);
     theComments.add(comment);
 
-    Entity commentEntity = new Entity("Task");
+    Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("name", name);
     commentEntity.setProperty("payload", payload);
     commentEntity.setProperty("stars", stars);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(taskEntity);
+    datastore.put(commentEntity);
 
-    response.setContentType("application/json;");
-    response.getWriter().println(new Gson().toJson(comment));
     response.sendRedirect("/index.html");
 
   }
@@ -103,11 +124,5 @@ public final class CommentsServlet extends HttpServlet {
         this.payload = payload;
         this.stars=stars;
     }
-    Comment(){
-        
-    }
-
-
   }
-
 }

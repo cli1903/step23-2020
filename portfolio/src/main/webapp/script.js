@@ -72,11 +72,11 @@ function setCommentContainerWithServlet() {
 
     console.log("Does this run???");
 
-    var commentParagraph = 'Here are the comments:\n\n';
-
     const commentContainer = document.getElementById('comment-container');
     var validateComments = commentPackage.flatMap(comment => validateComment(comment, x => [x], x => {console.log('Invalid comment ', x); return [];}) );
     validateComments.map(formatComment).forEach(formatted => commentContainer.innerText += formatted);
+
+    console.log("What about this...");
 
  });
 }
@@ -97,9 +97,9 @@ function formatComment(comment){
 }
 
 function validateComment(comment, onSuccess, onFailure){
-    if(comment.name==""){
+    if(comment.name==null){
         return onFailure(comment)
-    }else if(comment.payload==""){
+    }else if(comment.payload==null){
         return onFailure(comment)
     }
     return onSuccess(comment)
