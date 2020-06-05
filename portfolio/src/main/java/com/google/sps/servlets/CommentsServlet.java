@@ -63,9 +63,12 @@ public final class CommentsServlet extends HttpServlet {
     
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private static final String NAME_QUERY_PARAM = "name-input";
+    private static final String COMMENT_QUERY_PARAM = "comment-input";
 
-    String name = getParameter(request,"name-input", "");
-    String payload = getParameter(request,"comment-input", "");
+
+    String name = getParameter(request,NAME_QUERY_PARAM , "");
+    String payload = getParameter(request,COMMENT_QUERY_PARAM, "");
     int stars = 0;
 
     if(Boolean.parseBoolean(getParameter(request,"one-star", "false"))){stars=1;}
@@ -99,20 +102,6 @@ public final class CommentsServlet extends HttpServlet {
       return defaultValue;
     }
     return value;
-  }
-
-    private String convertToJson(String name, String comments, String stars ) {
-    String json = "{";
-    json += "\"Name\": ";
-    json += "\"" + name + "\"";
-    json += ", ";
-    json += "\"Comments\": ";
-    json += "\"" + comments + "\"";
-    json += ", ";
-    json += "\"Stars\": ";
-    json += "\"" + stars + "\"";
-    json += "}";
-    return json;
   }
 
   static class Comment{

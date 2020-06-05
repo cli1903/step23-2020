@@ -69,22 +69,17 @@ async function setHelloContainerWithServlet() {
 
 function setCommentContainerWithServlet() {
   fetch('/comments').then(response => response.json()).then((commentPackage) => {
-
-    console.log("Does this run???");
-
+      
     const commentContainer = document.getElementById('comment-container');
     var validateComments = commentPackage.flatMap(comment => validateComment(comment, x => [x], x => {console.log('Invalid comment ', x); return [];}) );
     validateComments.map(formatComment).forEach(formatted => commentContainer.innerText += formatted);
-
-    console.log("What about this...");
-
  });
 }
 
 function formatComment(comment){
     var formatted = "";
-    formatted += "\nName:            " + comment.name +"\n";
-    formatted += "Comment:         " + comment.payload +"\n";
+    formatted += "\nName:            " + comment.name;
+    formatted += "Comment:         " + comment.payload;
     formatted += "Stars:           ";
     if(comment.stars==0){
         formatted += "NO STARS";
