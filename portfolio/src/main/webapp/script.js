@@ -57,7 +57,7 @@ async function setHelloContainerWithServlet() {
  function setMyTeamConatainerWithServerlet(){
   fetch('/Team').then(response => response.json()).then((theTeam) => {
 
-    var teamParagraph = 'Here are the members of my team and their position:\n';
+    var teamParagraph = 'Here are the members of my team and their position:\n\n';
 
     for (i = 0; i < theTeam.members.length; i++){
         teamParagraph =  teamParagraph + theTeam.members[i].name + '\t'+ theTeam.members[i].status + '\n'
@@ -65,4 +65,43 @@ async function setHelloContainerWithServlet() {
 
     document.getElementById('team-container').innerText = teamParagraph;
  });
+}
+
+function setCommentContainerWithServlet() {
+  fetch('/comments').then(response => response.json()).then((commentPackage) => {
+
+    console.log("Does this run???");
+
+    var commentParagraph = 'Here are the comments:\n\n';
+
+    const commentContainer = document.getElementById('comment-container');
+    var validateComments = commentPackage.flatMap(comment => validateComment(comment, x => [x], x => {console.log('Invalid comment ', x); return [];}) );
+    validateComments.map(formatComment).forEach(formatted => commentContainer.innerText += formatted);
+
+ });
+}
+
+function formatComment(comment){
+    var formatted = "";
+    formatted += "\nName:            " + comment.name +"\n";
+    formatted += "Comment:         " + comment.payload +"\n";
+    formatted += "Stars:           ";
+    if(comment.stars==0){
+        formatted += "NO STARS";
+    }
+    while (comment.stars){    
+        formatted += "*";
+        comment.stars -= 1;
+    }
+    return formatted;
+}
+
+function validateComment(comment, onSuccess, onFailure){
+    if(comment.name==""){
+        return onFailure(comment)
+    }else if(comment.payload==""){
+        return onFailure(comment)
+    }
+    return onSuccess(comment)
+
 }

@@ -133,6 +133,11 @@ li{
 }
 
 #textBox{
-    width: 100%;
-    height: 22;
+    width: 90%;
+    height: 50px;
+}
+
+#textBox2{
+    width: 90%;
+    height: 25px;
 }

@@ -125,39 +125,50 @@
     </section>
     <br><br>
     <section>
+
         <section id="smallContent3">
             <h1>Hello Message</h1>
-            <p>Click here to get a hello:</p>
+            <p>Click here to get a hello:</p> 
             <button onclick="setHelloContainerWithServlet()">Get Hello</button>
+            <br><br> 
             <div id="hello-container"></div>
+            <br> 
         </section>
+
         <section id="smallContent3">
-            <h1>My Team</h1>
-            <p>Click here to see my team members:</p>
-            <button onclick="setMyTeamConatainerWithServerlet()">Get Team</button>
-            <div id="team-container"></div>
+            <h1>Comments</h1>
+            <br>
+            <div id="comment-container">
+                <button onclick="setCommentContainerWithServlet()">Comments:</button>
+            </div>
+            <br> 
         </section>
+
         <section id="smallContent3">
             <form action="/comments" method="POST">
 
-                <h1>Enter your NAME then COMMENT seperated by a comma:</h1>
-                <br/><br/>
-                <textarea id ="textBox" name="text-input">Enter your comment here.</textarea>
+                <h1>Enter your NAME and COMMENTS in thesev text boxes:</h1>
+                <p>Name:</p>
+                <textarea id ="textBox2" name="name-input"></textarea>
+                <br/>
+                <p>Enter your comment here:</p>
+                <textarea id ="textBox" name="comment-input"></textarea>
                 
                 <p>Rate Us:</p>
-                <input type="radio" name="one-star" value="true"> 1 Star
+                <input type="checkbox" name="one-star" value="true"> 1 Star
                 <br/>
-                <input type="radio" name="two-star" value="true"> 2 Star
+                <input type="checkbox" name="two-star" value="true"> 2 Star
                 <br/>
-                <input type="radio" name="three-star" value="true"> 3 Star
+                <input type="checkbox" name="three-star" value="true"> 3 Star
                 <br/>
-                <input type="radio" name="four-star" value="true"> 4 Star
+                <input type="checkbox" name="four-star" value="true"> 4 Star
                 <br/>
-                <input type="radio" name="five-star" value="true"> 5 Star
-                <br/>
+                <input type="checkbox" name="five-star" value="true"> 5 Star
+                <br/><br/>
                 <input type="submit" />
+                <br/>
             </form>
-            <div id="comment-container"></div>
+            <br/>
         </section>
     </section>
   </body>

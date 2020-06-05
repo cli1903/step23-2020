@@ -14,8 +14,10 @@
 
 package com.google.sps.servlets;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,39 +27,33 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public final class CommentsServlet extends HttpServlet {
 
+  private ArrayList<Comment> theComments = new ArrayList<Comment>(); 
+
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String text = getParameter(request, "text-input", "");
-    
-    boolean one = Boolean.parseBoolean(getParameter(request, "one-star", "false"));
-    boolean two = Boolean.parseBoolean(getParameter(request, "two-star", "false"));
-    boolean three = Boolean.parseBoolean(getParameter(request, "three-star", "false"));
-    boolean four = Boolean.parseBoolean(getParameter(request, "four-star", "false"));
-    boolean five = Boolean.parseBoolean(getParameter(request, "five-star", "false"));
-
-
-    // Convert the text to upper case.
-    if (one) {
-      text += ",*" ;
-    } else if (two) {
-      text += ",**" ;
-    } else if (three) {
-      text += ",***" ;
-    } else if (four) {
-      text += ",****";
-    } else if (five) {
-      text += ",*****";
-    } else {
-      text += ",No Stars";
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    response.setContentType("application/json;");
+    response.getWriter().println(new Gson().toJson(theComments));
     }
 
-    String[] words = text.split("\\s*,\\s*");
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    String name = getParameter(request,"name-input", "");
+    String payload = getParameter(request,"comment-input", "");
+    int stars = 0;
 
+    if(Boolean.parseBoolean(getParameter(request,"one-star", "false"))){stars=1;}
+    if( Boolean.parseBoolean(getParameter(request,"two-star", "false"))){stars=2;}
+    if( Boolean.parseBoolean(getParameter(request,"three-star", "false"))){stars=3;}
+    if( Boolean.parseBoolean(getParameter(request,"four-star", "false"))){stars=4;}
+    if( Boolean.parseBoolean(getParameter(request,"five-star", "false"))){stars=5;}
 
-    // Respond with the result.
-    response.setContentType("text/html;");
-    response.getWriter().println(Arrays.toString(words));
+    Comment comment = new Comment(name,payload,stars);
+    theComments.add(comment);
+
+    response.setContentType("application/json;");
+    response.getWriter().println(new Gson().toJson(comment));
+    response.sendRedirect("/index.html");
   }
 
   /**
@@ -70,6 +66,36 @@ public final class CommentsServlet extends HttpServlet {
       return defaultValue;
     }
     return value;
+  }
+
+    private String convertToJson(String name, String comments, String stars ) {
+    String json = "{";
+    json += "\"Name\": ";
+    json += "\"" + name + "\"";
+    json += ", ";
+    json += "\"Comments\": ";
+    json += "\"" + comments + "\"";
+    json += ", ";
+    json += "\"Stars\": ";
+    json += "\"" + stars + "\"";
+    json += "}";
+    return json;
+  }
+
+  static class Comment{
+    String name;
+    String payload;
+    int stars;
+    Comment(String name, String payload, int stars){
+        this.name=name;
+        this.payload = payload;
+        this.stars=stars;
+    }
+    Comment(){
+        
+    }
+
+
   }
 
 }
