@@ -46,6 +46,7 @@ public final class CommentsServlet extends HttpServlet {
   private static final String DATASTORE_PAYLOAD_PROPERTY_KEY = "payload";
   private static final String DATASTORE_STARS_PROPERTY_KEY = "stars";
   private static final String DATASTORE_COMMENT_ENTITY_TYPE = "Comment";
+  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query(DATASTORE_COMMENT_ENTITY_TYPE);
@@ -94,10 +95,10 @@ public final class CommentsServlet extends HttpServlet {
       stars = 5;
     }
 
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("name", name);
-    commentEntity.setProperty("payload", payload);
-    commentEntity.setProperty("stars", stars);
+    Entity commentEntity = new Entity(DATASTORE_COMMENT_ENTITY_TYPE);
+    commentEntity.setProperty(DATASTORE_NAME_PROPERTY_KEY, name);
+    commentEntity.setProperty(DATASTORE_PAYLOAD_PROPERTY_KEY, payload);
+    commentEntity.setProperty(DATASTORE_STARS_PROPERTY_KEY, stars);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
