@@ -107,3 +107,28 @@ function validateComment(comment, onSuccess, onFailure) {
   }
   return onSuccess(comment)
 }
+
+google.charts.load('current', {'packages': ['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+/** Creates a chart and adds it to the page. */
+function drawChart() {
+  const data = new google.visualization.DataTable();
+  data.addColumn('string', 'Part of Coding Process');
+  data.addColumn('number', 'Time Allocated(hrs)');
+  data.addRows([
+    ['Understanding Problem', 1], ['Thinking of Solution', 3],
+    ['Coding Solution', 3], ['Fixing Code Written', 5], ['Submitting PR/CL', 2],
+    ['Fixing Comments', 30]
+  ]);
+
+  const options = {
+    'title': 'Parts of Coding Processs',
+    'width': 400,
+    'height': 400
+  };
+
+  const chart = new google.visualization.PieChart(
+      document.getElementById('chart-container'));
+  chart.draw(data, options);
+}
