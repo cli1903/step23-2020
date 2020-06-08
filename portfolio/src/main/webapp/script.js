@@ -54,49 +54,56 @@ async function setHelloContainerWithServlet() {
   document.getElementById('hello-container').innerText = quote;
 }
 
- function setMyTeamConatainerWithServerlet(){
+function setMyTeamConatainerWithServerlet() {
   fetch('/Team').then(response => response.json()).then((theTeam) => {
+    var teamParagraph =
+        'Here are the members of my team and their position:\n\n';
 
-    var teamParagraph = 'Here are the members of my team and their position:\n\n';
-
-    for (i = 0; i < theTeam.members.length; i++){
-        teamParagraph =  teamParagraph + theTeam.members[i].name + '\t'+ theTeam.members[i].status + '\n'
+    for (i = 0; i < theTeam.members.length; i++) {
+      teamParagraph = teamParagraph + theTeam.members[i].name + '     ' +
+          theTeam.members[i].status;
     }
 
     document.getElementById('team-container').innerText = teamParagraph;
- });
+  });
 }
 
 function setCommentContainerWithServlet() {
-  fetch('/comments').then(response => response.json()).then((commentPackage) => {
-      
-    const commentContainer = document.getElementById('comment-container');
-    var validateComments = commentPackage.flatMap(comment => validateComment(comment, x => [x], x => {console.log('Invalid comment ', x); return [];}) );
-    validateComments.map(formatComment).forEach(formatted => commentContainer.innerText += formatted);
- });
+  fetch('/comments')
+      .then(response => response.json())
+      .then((commentPackage) => {
+        const commentContainer = document.getElementById('comment-container');
+        var validateComments = commentPackage.flatMap(
+            comment => validateComment(comment, x => [x], x => {
+              console.log('Invalid comment ', x);
+              return [];
+            }));
+        validateComments.map(formatComment)
+            .forEach(formatted => commentContainer.innerText += formatted);
+      });
 }
 
-function formatComment(comment){
-    var formatted = "";
-    formatted += "\nName:            " + comment.name;
-    formatted += "Comment:         " + comment.payload;
-    formatted += "Stars:           ";
-    if(comment.stars==0){
-        formatted += "NO STARS";
-    }
-    while (comment.stars){    
-        formatted += "*";
-        comment.stars -= 1;
-    }
-    return formatted;
+
+function formatComment(comment) {
+  var formatted = '';
+  formatted += 'Name: ' + comment.name;
+  formatted += ' Comment: ' + comment.payload;
+  formatted += ' Stars: ';
+  if (comment.stars == 0) {
+    formatted += 'NO STARS';
+  }
+  while (comment.stars) {
+    formatted += '*';
+    comment.stars -= 1;
+  }
+  return formatted + '      ';
 }
 
-function validateComment(comment, onSuccess, onFailure){
-    if(comment.name==null){
-        return onFailure(comment)
-    }else if(comment.payload==null){
-        return onFailure(comment)
-    }
-    return onSuccess(comment)
-
+function validateComment(comment, onSuccess, onFailure) {
+  if (comment.name == null) {
+    return onFailure(comment)
+  } else if (comment.payload == null) {
+    return onFailure(comment)
+  }
+  return onSuccess(comment)
 }
