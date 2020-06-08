@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 public final class CommentsServlet extends HttpServlet {
 
   private ArrayList<Comment> theComments = new ArrayList<Comment>(); 
+  private static final String NAME_QUERY_PARAM = "name-input";
+  private static final String COMMENT_QUERY_PARAM = "comment-input";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -49,9 +51,11 @@ public final class CommentsServlet extends HttpServlet {
         
         String name = (String) entity.getProperty("name");
         String payload = (String) entity.getProperty("payload");
-        int stars = (int) entity.getProperty("stars");
+        Long stars = (Long) entity.getProperty("stars");
+        
+        int starValue = stars.intValue();
 
-        Comment comment = new Comment(name, payload, stars);
+        Comment comment = new Comment(name, payload, starValue);
         comments.add(comment);
         }
 
@@ -63,9 +67,6 @@ public final class CommentsServlet extends HttpServlet {
     
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    private static final String NAME_QUERY_PARAM = "name-input";
-    private static final String COMMENT_QUERY_PARAM = "comment-input";
-
 
     String name = getParameter(request,NAME_QUERY_PARAM , "");
     String payload = getParameter(request,COMMENT_QUERY_PARAM, "");
