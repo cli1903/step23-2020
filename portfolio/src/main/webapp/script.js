@@ -119,24 +119,19 @@ function validateComment(comment, onSuccess, onFailure) {
 google.charts.load('current', {'packages': ['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
-/** Creates a chart and adds it to the page. */
 function drawChart() {
-  const data = new google.visualization.DataTable();
-  data.addColumn('string', 'Part of Coding Process');
-  data.addColumn('number', 'Time Allocated(hrs)');
-  data.addRows([
-    ['Understanding Problem', 1], ['Thinking of Solution', 3],
-    ['Coding Solution', 3], ['Fixing Code Written', 5], ['Submitting PR/CL', 2],
-    ['Fixing Comments', 30]
-  ]);
+  fetch('/charts').then(response => response.json()).then((movieVotes) => {
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'Movie');
+    data.addColumn('number', 'Votes');
+    Object.keys(movieVotes).forEach((movie) => {
+      data.addRow([movie, movieVotes[movie]]);
+    });
 
-  const options = {
-    'title': 'Parts of Coding Processs',
-    'width': 400,
-    'height': 400
-  };
+    const options = {'title': 'Favorite Movie', 'width': 625, 'height': 500};
 
-  const chart = new google.visualization.PieChart(
-      document.getElementById('chart-container'));
-  chart.draw(data, options);
+    const chart = new google.visualization.ColumnChart(
+        document.getElementById('chart-container'));
+    chart.draw(data, options);
+  });
 }

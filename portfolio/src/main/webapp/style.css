@@ -48,6 +48,28 @@
   float: left;
 }
 
+#smallContent4Left{
+  margin:3%;
+  margin-left: 7.5%;
+  width: 45%;
+  background-color: rgba(231, 120, 28, 0.979);
+  border: 8px solid darkgray;
+  border-radius: 5px;
+  text-align: center;
+  float: left;
+}
+
+#smallContent4Right{
+  margin:3%;
+  margin-top: 20%;
+  margin-left: 10%;
+  width: 25%;
+  background-color: rgba(231, 120, 28, 0.979);
+  border: 8px solid darkgray;
+  border-radius: 5px;
+  text-align: center;
+  float: left;
+}
 
 #babyParagraph{
   margin-top: 10%;
@@ -101,11 +123,11 @@ li{
 }
 
 .smallChart{
-  background-color: rgba(194, 197, 12, 0.897);
   border-radius: 5px;
   float: middle;
-  width: 50%;
-  margin-left: 25%;
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .text {

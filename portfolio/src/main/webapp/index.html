@@ -176,10 +176,32 @@
     </section>
 
     <section>
-        <section id="smallContent3">
-            <h1>Google Chart</h1>
+        <section id="smallContent4Left">
+            <h1>Movie Chart</h1>
             <div class="smallChart" id="chart-container"></div>
+            <br/><br/>
         </section>
+
+        <section id="smallContent4Right">
+            <h2>Vote</h2>
+            <form action="/charts" method="POST">
+            <select name="Animated Movies">
+                <option value="The Incredibles">The Incredibles</option>
+                <option value="Shrek">Shrek</option>
+                <option value="Toy Story">Toy Story</option>
+                <option value="Shark Tales">Shark Tales</option>
+                <option value="UP">UP</option>
+                <option value="Inside Out">Inside Out</option>
+                <option value="Ratatouille">Ratatouille</option>
+                <option value="Coraline">Coraline</option>
+                <option value="Lion King">Lion King</option>
+            </select>
+            <br/><br/>
+            <button>Submit</button>
+            </form>
+            <br/><br/>
+        </section>
+
     </section>
   </body>
 </html>
