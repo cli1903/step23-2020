@@ -16,9 +16,9 @@ package com.google.sps.servlets;
 
 import com.google.gson.Gson;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/charts")
 public class ChartServlet extends HttpServlet {
-  private Map<String, Integer> movieVotes = new HashMap<>();
+  private Map<String, Integer> movieVotes = new ConcurrentHashMap<>();
   private static final String ANIMATED_MOVIE_QUERY_PARAM = "Animated_Movies";
 
   @Override
@@ -40,8 +40,8 @@ public class ChartServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String animatedMovie = request.getParameter(ANIMATED_MOVIE_QUERY_PARAM);
-    int currentVotes = movieVotes.containsKey(animatedMovie) ? movieVotes.get(animatedMovie) : 0;
-    movieVotes.put(animatedMovie, currentVotes + 1);
+    int numVotes = movieVotes.merge(animatedMovie, 1, (oldCount, update) -> oldCount + update);
+    movieVotes.put(animatedMovie, numVotes);
 
     response.sendRedirect("/index.html");
   }

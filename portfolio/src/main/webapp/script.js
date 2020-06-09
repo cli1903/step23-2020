@@ -128,7 +128,12 @@ function drawChart() {
       data.addRow([movie, movieVotes[movie]]);
     });
 
-    const options = {'title': 'Favorite Movie', 'width': 625, 'height': 500};
+    const options = {
+      'title': 'Favorite Movie',
+      'width': 625,
+      'height': 500,
+      'vAxis': {'gridlines': {'multiple': 1}, 'minorGridlines': {'count': 0}}
+    };
 
     const chart = new google.visualization.ColumnChart(
         document.getElementById('chart-container'));
