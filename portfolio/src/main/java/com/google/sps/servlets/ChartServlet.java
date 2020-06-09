@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/charts")
 public class ChartServlet extends HttpServlet {
   private Map<String, Integer> movieVotes = new HashMap<>();
-  private static final String MOVIE_QUERY_PARAM = "Animated Movies";
+  private static final String ANIMATED_MOVIE_QUERY_PARAM = "Animated_Movies";
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -39,9 +39,9 @@ public class ChartServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String movie = request.getParameter(MOVIE_QUERY_PARAM);
-    int currentVotes = movieVotes.containsKey(movie) ? movieVotes.get(movie) : 0;
-    movieVotes.put(movie, currentVotes + 1);
+    String animatedMovie = request.getParameter(ANIMATED_MOVIE_QUERY_PARAM);
+    int currentVotes = movieVotes.containsKey(animatedMovie) ? movieVotes.get(animatedMovie) : 0;
+    movieVotes.put(animatedMovie, currentVotes + 1);
 
     response.sendRedirect("/index.html");
   }
