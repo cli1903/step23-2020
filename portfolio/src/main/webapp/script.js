@@ -78,11 +78,19 @@ function setCommentContainerWithServlet() {
               console.log('Invalid comment ', x);
               return [];
             }));
+        const commentEl = document.getElementById('comments');
         validateComments.map(formatComment)
-            .forEach(formatted => commentContainer.innerText += formatted);
+            .forEach(
+                formatted =>
+                    commentEl.appendChild(createListElement(formatted)));
       });
 }
 
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
 
 function formatComment(comment) {
   var formatted = '';
