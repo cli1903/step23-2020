@@ -57,7 +57,15 @@ async function setHelloContainerWithServlet() {
 async function setTester() {
   fetch('/login').then(response => response.json()).then((informationLinks) => {
     const testContainer = document.getElementById('test-container');
-    testContainer.innerText = informationLinks.returnLink;
+    var aLink = document.createElement('a');  
+    var linkText = document.createTextNode("This the test link");
+    aLink.appendChild(link);  
+    aLink.title = "This the test Link";  
+    aLink.href = informationLinks.returnLink;
+
+
+    testContainer.appendChild(createParagraphElement(informationLinks.greeting));
+    testContainer.appendChild(a);
   });
 }
 
