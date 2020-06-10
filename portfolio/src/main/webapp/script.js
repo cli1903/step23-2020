@@ -54,6 +54,13 @@ async function setHelloContainerWithServlet() {
   document.getElementById('hello-container').innerText = quote;
 }
 
+async function setTester() {
+  fetch('/login').then(response => response.json()).then((informationLinks) => {
+    const testContainer = document.getElementById('test-container');
+    testContainer.innerText = informationLinks.returnLink;
+  });
+}
+
 function setMyTeamConatainerWithServerlet() {
   fetch('/Team').then(response => response.json()).then((theTeam) => {
     var teamParagraph =
@@ -90,6 +97,12 @@ function createListElement(text) {
   const liElement = document.createElement('li');
   liElement.innerText = text;
   return liElement;
+}
+
+function createParagraphElement(text) {
+  const pElement = document.createElement('p');
+  pElement.innerText = text;
+  return pElement;
 }
 
 function formatComment(comment) {
