@@ -59,7 +59,7 @@ async function setTester() {
     const testContainer = document.getElementById('test-container');
     var aLink = document.createElement('a');  
     var linkText = document.createTextNode("This the test link");
-    aLink.appendChild(link);  
+    aLink.appendChild(linkText);  
     aLink.title = "This the test Link";  
     aLink.href = informationLinks.returnLink;
 
