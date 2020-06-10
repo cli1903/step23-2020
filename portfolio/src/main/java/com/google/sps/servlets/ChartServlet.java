@@ -40,8 +40,7 @@ public class ChartServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String animatedMovie = request.getParameter(ANIMATED_MOVIE_QUERY_PARAM);
-    int numVotes = movieVotes.merge(animatedMovie, 1, (oldCount, update) -> oldCount + update);
-    movieVotes.put(animatedMovie, numVotes);
+    movieVotes.merge(animatedMovie, 1, (oldCount, update) -> oldCount + update);
 
     response.sendRedirect("/index.html");
   }
