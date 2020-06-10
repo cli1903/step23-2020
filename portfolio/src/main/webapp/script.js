@@ -78,11 +78,19 @@ function setCommentContainerWithServlet() {
               console.log('Invalid comment ', x);
               return [];
             }));
+        const commentEl = document.getElementById('comments');
         validateComments.map(formatComment)
-            .forEach(formatted => commentContainer.innerText += formatted);
+            .forEach(
+                formatted =>
+                    commentEl.appendChild(createListElement(formatted)));
       });
 }
 
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
 
 function formatComment(comment) {
   var formatted = '';
@@ -106,4 +114,29 @@ function validateComment(comment, onSuccess, onFailure) {
     return onFailure(comment)
   }
   return onSuccess(comment)
+}
+
+google.charts.load('current', {'packages': ['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+  fetch('/charts').then(response => response.json()).then((movieVotes) => {
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'Movie');
+    data.addColumn('number', 'Votes');
+    Object.keys(movieVotes).forEach((movie) => {
+      data.addRow([movie, movieVotes[movie]]);
+    });
+
+    const options = {
+      'title': 'Favorite Movie',
+      'width': 625,
+      'height': 500,
+      'vAxis': {'gridlines': {'multiple': 1}, 'minorGridlines': {'count': 0}}
+    };
+
+    const chart = new google.visualization.ColumnChart(
+        document.getElementById('chart-container'));
+    chart.draw(data, options);
+  });
 }
