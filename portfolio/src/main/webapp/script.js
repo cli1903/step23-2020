@@ -57,27 +57,27 @@ async function setHelloContainerWithServlet() {
 async function setTester() {
   fetch('/login').then(response => response.json()).then((informationLinks) => {
     const testContainer = document.getElementById('test-container');
-    var linkText = 'This the test link';
     var title = 'This the test link for user authentication';
-    var aLink = createLinkElement(linkText, informationLinks.returnLink, title);
 
-    testContainer.appendChild(
-        createParagraphElement(informationLinks.greeting));
-
-    if(!(informationLinks.loggedIn)){
-        document.getElementById('theButton').style.visibility = "hidden";
-        document.getElementById('smallContent4Right2').appendChild(aLink);
-    } else{
-        document.getElementById('theButton').style.visibility = "visible";
-        document.getElementById('smallContent4Right').appendChild(aLink);
+    if (!(informationLinks.loggedIn)) {
+      document.getElementById('theButton').style.visibility = 'hidden';
+      var linkText = 'Use this link to Log In';
+      var aLink =
+          createLinkElement(linkText, informationLinks.returnLink, title);
+      document.getElementById('smallContent4Right').appendChild(aLink);
+    } else {
+      document.getElementById('theButton').style.visibility = 'visible';
+      var linkText = 'Use this link to Log Out';
+      var aLink =
+          createLinkElement(linkText, informationLinks.returnLink, title);
+      document.getElementById('smallContent4Right').appendChild(aLink);
     }
   });
 }
 
-function forOnLoad(){
-    showSlides();
-    setTester();
-
+function forOnLoad() {
+  showSlides();
+  setTester();
 }
 
 function setMyTeamConatainerWithServerlet() {
