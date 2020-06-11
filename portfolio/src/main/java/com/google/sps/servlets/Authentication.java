@@ -27,26 +27,26 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/login")
 public class Authentication extends HttpServlet {
+  private static final String DEFAULT_LOGOUT_URL_REDIRECT = "/";
+  private static final String DEFAULT_LOGIN_URL_REDIRECT = "/";
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json;");
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
-      String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/";
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
+      String greeting = String.format("Hello %s!", userService.getCurrentUser().getEmail());
+      String logoutUrl = userService.createLogoutURL(DEFAULT_LOGOUT_URL_REDIRECT);
 
-      String greeting = "Hello " + userEmail + " !";
       AuthenticatorInfo returnInfo = new AuthenticatorInfo(greeting, logoutUrl);
       Gson gson = new Gson();
       String json = gson.toJson(returnInfo);
 
       response.getWriter().println(json);
     } else {
-      String urlToRedirectToAfterUserLogsIn = "/";
-      String greeting =  "Hello stranger.";
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+      String greeting = "Hello stranger.";
+      String loginUrl = userService.createLoginURL(DEFAULT_LOGIN_URL_REDIRECT);
 
       AuthenticatorInfo returnInfo = new AuthenticatorInfo(greeting, loginUrl);
       Gson gson = new Gson();
