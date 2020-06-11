@@ -39,7 +39,7 @@ public class Authentication extends HttpServlet {
       String greeting = String.format("Hello %s!", userService.getCurrentUser().getEmail());
       String logoutUrl = userService.createLogoutURL(DEFAULT_LOGOUT_URL_REDIRECT);
 
-      AuthenticatorInfo returnInfo = new AuthenticatorInfo(greeting, logoutUrl);
+      AuthenticatorInfo returnInfo = new AuthenticatorInfo(greeting, logoutUrl, true);
       Gson gson = new Gson();
       String json = gson.toJson(returnInfo);
 
@@ -48,7 +48,7 @@ public class Authentication extends HttpServlet {
       String greeting = "Hello stranger.";
       String loginUrl = userService.createLoginURL(DEFAULT_LOGIN_URL_REDIRECT);
 
-      AuthenticatorInfo returnInfo = new AuthenticatorInfo(greeting, loginUrl);
+      AuthenticatorInfo returnInfo = new AuthenticatorInfo(greeting, loginUrl, false);
       Gson gson = new Gson();
       String json = gson.toJson(returnInfo);
 

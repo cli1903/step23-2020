@@ -17,8 +17,10 @@ package com.google.sps.data;
 public final class AuthenticatorInfo {
   String greeting;
   String returnLink;
-  public AuthenticatorInfo(String greeting, String returnLink) {
+  boolean loggedIn;
+  public AuthenticatorInfo(String greeting, String returnLink, boolean loggedIn) {
     this.greeting = greeting;
     this.returnLink = returnLink;
+    this.loggedIn = loggedIn;
   }
 }
