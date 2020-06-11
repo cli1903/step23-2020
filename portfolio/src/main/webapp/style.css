@@ -61,7 +61,19 @@
 
 #smallContent4Right{
   margin:3%;
-  margin-top: 20%;
+  margin-top: 10%;
+  margin-left: 10%;
+  width: 25%;
+  background-color: rgba(231, 120, 28, 0.979);
+  border: 8px solid darkgray;
+  border-radius: 5px;
+  text-align: center;
+  float: left;
+}
+
+#smallContent4Right2{
+  margin:3%;
+  margin-top: 10%;
   margin-left: 10%;
   width: 25%;
   background-color: rgba(231, 120, 28, 0.979);

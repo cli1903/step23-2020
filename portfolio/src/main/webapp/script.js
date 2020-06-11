@@ -57,17 +57,27 @@ async function setHelloContainerWithServlet() {
 async function setTester() {
   fetch('/login').then(response => response.json()).then((informationLinks) => {
     const testContainer = document.getElementById('test-container');
-    var aLink = document.createElement('a');
-    var linkText = document.createTextNode('This the test link');
-    aLink.appendChild(linkText);
-    aLink.title = 'This the test link for user authentication';
-    aLink.href = informationLinks.returnLink;
-
+    var linkText = 'This the test link';
+    var title = 'This the test link for user authentication';
+    var aLink = createLinkElement(linkText, informationLinks.returnLink, title);
 
     testContainer.appendChild(
         createParagraphElement(informationLinks.greeting));
-    testContainer.appendChild(aLink);
+
+    if(!(informationLinks.loggedIn)){
+        document.getElementById('theButton').style.visibility = "hidden";
+        document.getElementById('smallContent4Right2').appendChild(aLink);
+    } else{
+        document.getElementById('theButton').style.visibility = "visible";
+        document.getElementById('smallContent4Right').appendChild(aLink);
+    }
   });
+}
+
+function forOnLoad(){
+    showSlides();
+    setTester();
+
 }
 
 function setMyTeamConatainerWithServerlet() {
@@ -112,6 +122,16 @@ function createParagraphElement(text) {
   const pElement = document.createElement('p');
   pElement.innerText = text;
   return pElement;
+}
+
+function createLinkElement(text, website, title) {
+  const aElement = document.createElement('a');
+  var innerText = document.createTextNode(text);
+  aElement.appendChild(innerText);
+  aElement.href = website;
+  aElement.title = title;
+
+  return aElement;
 }
 
 function formatComment(comment) {

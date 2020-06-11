@@ -8,7 +8,7 @@
     <script src="script.js"></script>
   </head>
   
-  <body onload="showSlides()">
+  <body onload="forOnLoad()">
     
     <section id="portfolio-header">
       <h1>Anthony's Google  Portfolio</h1>
@@ -184,7 +184,7 @@
 
         <section id="smallContent4Right">
             <h2>Vote</h2>
-            <form action="/charts" method="POST">
+            <form id=action="/charts" method="POST">
             <label for="Animated_Movies">Choose a Movie:</label>
             <select name="Animated_Movies" id="Animated_Movies">
                 <option value="The Incredibles">The Incredibles</option>
@@ -198,22 +198,20 @@
                 <option value="Lion King">Lion King</option>
             </select>
             <br/><br/>
-            <button>Submit</button>
+            <button id="theButton">Submit</button>
             </form>
             <br/><br/>
         </section>
     </section>
-
+    
     <section>
-        <section id="smallContent3">
+        <section id="smallContent4Right2">
             <h1>Test Message</h1>
-            <p>Click here to get a test response:</p> 
-            <button onclick="setTester()">Test Button</button>
+            <p>Click here to get a test response:</p>  
             <br><br> 
             <div id="test-container"></div>
             <br> 
         </section>
     </section>
-
   </body>
 </html>
