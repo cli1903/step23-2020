@@ -57,19 +57,19 @@ async function setHelloContainerWithServlet() {
 async function setTester() {
   fetch('/login').then(response => response.json()).then((informationLinks) => {
     var title = 'This the test link for user authentication';
-    var buttonVisibility =
-        document.getElementById('theButton').style.visibility;
+    var theButton =
+        document.getElementById('theButton');
     var linkHome = document.getElementById('smallContent4Right');
 
-    if (!(informationLinks.loggedIn)) {
-      buttonVisibility = 'hidden';
+    if (!informationLinks.loggedIn) {
+      theButton.style.visibility = 'hidden';
       var linkText = 'Use this link to Log In';
       var aLink =
           createLinkElement(linkText, informationLinks.returnLink, title);
 
       linkHome.appendChild(aLink);
     } else {
-      buttonVisibility = 'visible';
+      theButton.style.visibility = 'visible';
       var linkText = 'Use this link to Log Out';
       var aLink =
           createLinkElement(linkText, informationLinks.returnLink, title);
