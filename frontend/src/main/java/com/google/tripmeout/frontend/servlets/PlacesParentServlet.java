@@ -29,41 +29,13 @@ public class PlacesParentServlet extends HttpServlet {
   private static final String SORT_REQUEST_PARAM = "sort";
   private static final String LATITUDE_REQUEST_PARAM = "latitude";
   private static final String LONGITUDE_REQUEST_PARAM = "longitude";
+  private static final String NEXT_PAGE_REQUEST_PARAM = "next-page"
 
-  private static final Set<String> FOOD_PLACE_TYPES = new HashSet<>(
-    Arrays.asList("bakery", "bar", "cafe", "lodging", "meal_delivery", 
-      "meal_takeaway", "restaurant", "supermarket"));
-
-  private static final Set<String> TRANSPORT_PLACE_TYPES = new HashSet<>(
-    Arrays.asList("airport", "bus_station", "car_rental", "subway_station", 
-      "train_station", "transit_station"));
-
-  private static final Set<String> SHOPPING_PLACE_TYPES = new HashSet<>(
-    Arrays.asList("bookstore", "clothing_store", "convenience_store", 
-      "department_store", "drugstore", "shopping_mall", "store"));
-
-  private static final Set<String> PLACES_OF_WORSHIP_TYPES = new HashSet<>(
-    Arrays.asList("church", "hindu_temple", "mosque", "synagogue"));
-
-  private static final Set<String> ACTIVITY_PLACE_TYPES = new HashSet<>(
-    Arrays.asList( "amusement_park", "aquarium", "art_gallery", "bar", 
-      "bowling_alley", "campground", "casino", "city_hall", "embassy", 
-      "library", "movie_theater", "museum", "night_club", "painter", "park", 
-      "spa", "stadium", "tourist_attraction", "university", "zoo"));
-
-  private static final Set<String> ALL_VACATION_PLACE_TYPES = new HashSet<>(
-    Arrays.asList("amusement_park", "aquarium", "art_gallery", "bar", 
-      "bowling_alley", "campground", "casino", "city_hall", "embassy", 
-      "library", "movie_theater", "museum", "night_club", "painter", "park", 
-      "spa", "stadium", "tourist_attraction", "university", "zoo", "church", 
-      "hindu_temple", "mosque", "synagogue", "bookstore", "clothing_store", 
-      "convenience_store", "department_store", "drugstore", "shopping_mall", 
-      "store", "bakery", "bar", "cafe", "lodging", "meal_delivery", 
-      "meal_takeaway", "restaurant", "supermarket"));
-
-  private final GeoApiContext context = new GeoApiContext.Builder()
+  private final GeoApiContext CONTEXT = new GeoApiContext.Builder()
     .apiKey("AIzaSyCJ5nD1n3osPyQHjdY1bCE6i887N32UTLM")
     .build();
+
+  private static final String NEXT_PAGE_TOKEN;
 
   public PlacesParentServlet(PlaceVisitStorage storage, Gson gson) {
     this.storage = storage;
@@ -73,7 +45,9 @@ public class PlacesParentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException {
-        
+
+    boolean getNextPage = request.getParameter(NEXT_PAGE_TOKEN).equals("True");
+
     double latitude = Double.valueOf(request.getParameter(LATITUDE_REQUEST_PARAM));
     double longitude = Double.valueOf(request.getParameter(LONGITUDE_REQUEST_PARAM));
     LatLng location = new LatLng(latitude, longitude);
@@ -94,7 +68,10 @@ public class PlacesParentServlet extends HttpServlet {
 
     try {
       List<PlacesSearchResult> nearbyPlaces = getNearbyPlaces(location, radius, sortMethod);
+      response.setContentType("application/json");
+      response.getWriter().println(gson.toJson(nearbyPlaces));
     } catch (Exception e) {
+      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       response.setContentType("application/json");
       response.getWriter().println(gson.toJson("Error getting nearby places"));
       return;
@@ -105,8 +82,9 @@ public class PlacesParentServlet extends HttpServlet {
   public List<PlacesSearchResult> getNearbyPlaces(LatLng location, int radius, String sortMethod) 
       throws ApiException, InterruptedException, IOException {
 
-    NearbySearchRequest nearby = new NearbySearchRequest(context)
-      .location(location);
+    NearbySearchRequest nearby = new NearbySearchRequest(CONTEXT)
+      .location(location)
+      .type("point_of_interest");
 
     if (sortMethod.equals("distance")) {
       nearby = nearby.rankby(RankBy.DISTANCE);
@@ -118,23 +96,26 @@ public class PlacesParentServlet extends HttpServlet {
       nearby = nearby.rankby(RankBy.PROMINENCE);
     }
 
+    if (getNextPage) {
+      nearby = nearby.pageToken(NEXT_PAGE_TOKEN);
+    }
+
     List<PlacesSearchResult> nearbyPlaces = new ArrayList<>();
 
     PlacesSearchResponse response = nearby.await();
 
-    while (response.nextPageToken != null) {
-      PlacesSearchResult[] nearbyPlacesResults = response.results;
-      for (PlacesSearchResult place: nearbyPlacesResults) {
-        for (String placeType: place.types) {
-          if (ALL_VACATION_PLACE_TYPES.contains(placeType)) {
-            nearbyPlaces.add(place);
-            break;
-          }
-        }
-      }
+    String currentToken = "first-time";
 
-      response = nearby.pageToken(response.nextPageToken).await();
+    PlacesSearchResult[] nearbyPlacesResults = response.results;
+
+    for (PlacesSearchResult place: nearbyPlacesResults) {
+      if (!place.permanentlyClosed) {
+        nearbyPlaces.add(place);
+      }
     }
+
+    NEXT_PAGE_TOKEN = response.nextPageToken;
+
     return nearbyPlaces;
   }
 }
