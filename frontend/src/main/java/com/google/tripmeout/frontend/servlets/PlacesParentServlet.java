@@ -7,10 +7,13 @@ import com.google.tripmeout.frontend.storage.TripStorage;
 import com.google.gson.Gson;
 import com.google.maps.GeoApiContext;
 import com.google.maps.NearbySearchRequest;
+import com.google.maps.PlaceDetailsRequest;
 import com.google.maps.model.PlacesSearchResponse;
 import com.google.maps.model.PlacesSearchResult;
+import com.google.maps.model.PlaceDetails;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.RankBy;
+import com.google.maps.model.PlaceType;
 import com.google.maps.errors.ApiException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +23,7 @@ import java.lang.InterruptedException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.Optional;
 
 public class PlacesParentServlet extends HttpServlet {
   private final PlaceVisitStorage placeStorage;
@@ -30,17 +32,17 @@ public class PlacesParentServlet extends HttpServlet {
 
   private static final String RADIUS_REQUEST_PARAM = "radius"; 
   private static final String SORT_REQUEST_PARAM = "sort";
-  private static final String TRIPID_REQUEST_PARAM = "tripId"
-  private static final String NEXT_PAGE_REQUEST_PARAM = "next-page"
+  private static final String TRIPID_REQUEST_PARAM = "tripId";
+  private static final String NEXT_PAGE_REQUEST_PARAM = "next-page";
   private static final String PLACE_NAME_REQUEST_PARAM = "place-name";
   private static final String PLACEID_REQUEST_PARAM = "placeId";
   private static final String USER_MARK_REQUEST_PARAM = "user-mark";
 
   private final GeoApiContext CONTEXT = new GeoApiContext.Builder()
-    .apiKey("AIzaSyCJ5nD1n3osPyQHjdY1bCE6i887N32UTLM")
+    .apiKey("API-KEY")
     .build();
 
-  private static final String NEXT_PAGE_TOKEN;
+  private static String NEXT_PAGE_TOKEN;
 
   public PlacesParentServlet(PlaceVisitStorage placeStorage, TripStorage tripStorage, Gson gson) {
     this.placeStorage = placeStorage;
@@ -55,9 +57,9 @@ public class PlacesParentServlet extends HttpServlet {
     PlaceVisitModel.UserMark status = request.getParameter(USER_MARK_REQUEST_PARAM);
 
     PlaceDetailsRequest place = new PlaceDetailsRequest(CONTEXT).placeId(placeId);
-    PlaceDetails details = place.await().getResult();
+    PlaceDetails details = place.await().result;
 
-    PlaceVisitModel newPlace = new PlaceVisitModel.builder()
+    PlaceVisitModel newPlace = PlaceVisitModel.builder()
       .setTripId(tripId)
       .setPlaceId(placeId)
       .setName(details.name)
@@ -65,7 +67,7 @@ public class PlacesParentServlet extends HttpServlet {
       .setLocationLong(details.geometry.location.lng)
       .build();
 
-    placeStorage.update
+    boolean updated = placeStorage.updateUserMarkOrAddPlaceVisit(newPlace, status);
 
   }
 
@@ -96,12 +98,12 @@ public class PlacesParentServlet extends HttpServlet {
 
   }
 
-  public List<PlacesVisitModel> getNearbyPlaces(String tripId, boolean getNextPage, LatLng location, int radius, String sortMethod, String name) 
+  public List<PlacesSearchResult> getNearbyPlaces(String tripId, boolean getNextPage, LatLng location, int radius, String sortMethod, String name) 
       throws ApiException, InterruptedException, IOException {
 
     NearbySearchRequest nearby = new NearbySearchRequest(CONTEXT)
       .location(location)
-      .type("point_of_interest");
+      .type(PlaceType.TOURIST_ATTRACTION);
 
     if (sortMethod.equals("distance")) {
       nearby = nearby.rankby(RankBy.DISTANCE);
@@ -130,10 +132,10 @@ public class PlacesParentServlet extends HttpServlet {
           nearbyPlaces.add(nearPlace.get());
         } else {
           PlaceVisitModel newPlace = PlaceVisitModel.builder()
-            .setTripId(tripId);
+            .setTripId(tripId)
             .setPlaceId(place.placeId)
             .setName(place.name)
-            .setLocationLat(location.lat)
+            .setLatitude(location.lat)
             .setLocationLong(location.lng)
             .build();
           nearbyPlaces.add(newPlace);
