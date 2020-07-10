@@ -50,7 +50,7 @@ public class GsonPlaceVisitTypeAdapter extends TypeAdapter<PlaceVisitModel> {
           break;
         default:
           throw new JsonParseException(
-              String.format("Unknown field name %s for type Trip Model", name));
+              String.format("Unknown field name %s for type PlaceVisit Model", name));
       }
     }
     reader.endObject();
